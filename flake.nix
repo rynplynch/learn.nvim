@@ -1,5 +1,5 @@
 {
- description = "An over-engineered learn-nvim World in C";
+  description = "An over-engineered learn-nvim World in C";
 
   # Nixpkgs / NixOS version to use.
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
