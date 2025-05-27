@@ -1,5 +1,7 @@
-{mkShell, nixpkgs-fmt, neovim}:
-mkShell {
+{ pkgs ? import <nixpkgs> { }
+,
+}:
+with pkgs; mkShell {
   buildInputs = [
     nixpkgs-fmt
     neovim
