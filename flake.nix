@@ -51,6 +51,11 @@
       # package.
       defaultPackage = forAllSystems (system: self.packages.${system}.hello);
 
+      devShells = forAllSystems (system:
+        {
+          default = import ./shell.nix { pkgs = nixpkgsFor.${system}; };
+        });
+
       # A NixOS module, if applicable (e.g. if the package provides a system service).
       nixosModules.hello =
         { pkgs, ... }:
