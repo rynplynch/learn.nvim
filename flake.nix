@@ -29,14 +29,8 @@
       # A Nixpkgs overlay.
       overlay = final: prev: {
 
-        hello = with final; stdenv.mkDerivation rec {
-          pname = "hello";
-          inherit version;
-
-          src = ./.;
-
-          nativeBuildInputs = [ autoreconfHook ];
-        };
+        learn-nvim = with final;
+          import ./default.nix { pkgs = nixpkgsFor.${system}; };
 
       };
 
