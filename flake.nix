@@ -1,5 +1,5 @@
 {
-  description = "An over-engineered Hello World in C";
+ description = "An over-engineered learn-nvim World in C";
 
   # Nixpkgs / NixOS version to use.
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -43,13 +43,13 @@
       # Provide some binary packages for selected system types.
       packages = forAllSystems (system:
         {
-          inherit (nixpkgsFor.${system}) hello;
+          inherit (nixpkgsFor.${system}) learn-nvim;
         });
 
       # The default package for 'nix build'. This makes sense if the
       # flake provides only one package or there is a clear "main"
       # package.
-      defaultPackage = forAllSystems (system: self.packages.${system}.hello);
+      defaultPackage = forAllSystems (system: self.packages.${system}.learn-nvim);
 
       devShells = forAllSystems (system:
         {
@@ -57,12 +57,12 @@
         });
 
       # A NixOS module, if applicable (e.g. if the package provides a system service).
-      nixosModules.hello =
+      nixosModules.learn-nvim =
         { pkgs, ... }:
         {
           nixpkgs.overlays = [ self.overlay ];
 
-          environment.systemPackages = [ pkgs.hello ];
+          environment.systemPackages = [ pkgs.learn-nvim ];
 
           #systemd.services = { ... };
         };
@@ -73,20 +73,20 @@
           with nixpkgsFor.${system};
 
           {
-            inherit (self.packages.${system}) hello;
+            inherit (self.packages.${system}) learn-nvim;
 
             # Additional tests, if applicable.
             test = stdenv.mkDerivation {
-              pname = "hello-test";
+              pname = "learn-nvim-test";
               inherit version;
 
-              buildInputs = [ hello ];
+              buildInputs = [ learn-nvim ];
 
               dontUnpack = true;
 
               buildPhase = ''
                 echo 'running some integration tests'
-                [[ $(hello) = 'Hello Nixers!' ]]
+                [[ $(learn-nvim) = 'Hello Nixers!' ]]
               '';
 
               installPhase = "mkdir -p $out";
@@ -104,7 +104,7 @@
               makeTest {
                 nodes = {
                   client = { ... }: {
-                    imports = [ self.nixosModules.hello ];
+                    imports = [ self.nixosModules.learn-nvim ];
                   };
                 };
 
@@ -112,7 +112,7 @@
                   ''
                     start_all()
                     client.wait_for_unit("multi-user.target")
-                    client.succeed("hello")
+                    client.succeed("learn-nvim")
                   '';
               };
           }
