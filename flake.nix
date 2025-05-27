@@ -27,23 +27,27 @@
     {
 
       # A Nixpkgs overlay.
-      overlay = final: prev: {
-
-        learn-nvim = with final;
-          import ./default.nix { pkgs = nixpkgsFor.${system}; };
-
-      };
+      overlay = final: prev:
+        let
+          learn-nvim =
+            import ./default.nix { pkgs = nixpkgsFor.${prev.system}; };
+        in
+        {
+          vimPlugins = prev.vimPlugins // {
+            inherit learn-nvim;
+          };
+        };
 
       # Provide some binary packages for selected system types.
       packages = forAllSystems (system:
         {
-          inherit (nixpkgsFor.${system}) learn-nvim;
+          inherit (nixpkgsFor.${system}) vimPlugins;
         });
 
       # The default package for 'nix build'. This makes sense if the
       # flake provides only one package or there is a clear "main"
       # package.
-      defaultPackage = forAllSystems (system: self.packages.${system}.learn-nvim);
+      defaultPackage = forAllSystems (system: self.packages.${system}.vimPlugins.learn-nvim);
 
       devShells = forAllSystems (system:
         {
